@@ -1,13 +1,12 @@
-# ga-capstone-equity-recs
-DSI-9 Capstone Project: A recommendation system for UK equities
+# equity-recs
 
-### \[ \]
+### DSI-9 Capstone Project: A recommendation system for UK equities
 
-Recommendaton system for UK equities
+A recommendaton system for UK equities
 
-\[ \]
+\[Some more text will go here in due course\]
 
 - - - -
 #### Files in this repo:
 
-* capstone.ipynb - Capstone outputs and demonstration
+* [capstone.ipynb](blob/master/capstone.ipynb) - Capstone outputs and demonstration
