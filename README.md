@@ -4,9 +4,8 @@
 
 A recommendaton system for UK equities
 
-\[Some more text will go here in due course\]
-
 - - - -
 #### Files in this repo:
 
 * [capstone.ipynb](capstone.ipynb) - Capstone outputs and demonstration
+* [capstone.html](capstone.html) - As above but the navigation links work as does not use github's live preview
