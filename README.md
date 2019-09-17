@@ -1,11 +1,13 @@
 # equity-recs
 
-### DSI-9 Capstone Project: A recommendation system for UK equities
+### DSI-9 Capstone Project: Recommendation engine for equities investors
 
-A recommendaton system for UK equities
+Recommendation engine for equities investors
+
+This project was undertaken during my Data Science Immersive course at General Assembly in London
 
 - - - -
 #### Files in this repo:
 
 * [capstone.html](https://algrt-hm.github.io/equity-recs/capstone.html) - Capstone outputs and demonstration - best way to view
-* [capstone.ipynb](capstone.ipynb) - Capstone outputs and demonstration - uses github's live preview of jupyter notebook which breaks navigation links
+* [capstone.ipynb](capstone.ipynb) - Capstone outputs and demonstration - uses github's live preview of Jupyter notebook which breaks the navigation links
