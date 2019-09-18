@@ -4,8 +4,6 @@
 
 Recommendation engine for equities investors
 
-This project was undertaken during my Data Science Immersive course at General Assembly in London
-
 - - - -
 #### Files in this repo:
 
