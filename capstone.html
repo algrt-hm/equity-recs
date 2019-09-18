@@ -13151,40 +13151,45 @@ div#notebook {
 </li>
 <li><p>Recommendations from the models can be used separately or aggregated</p>
 </li>
-<li><p>A universe of $211$ companies and $1561$ investors is considered, with the top $30$ investors also being used for the classification models</p>
+<li><p>Data used comprise:</p>
+<ul>
+<li>A core universe of $211$ companies and their features, for content filtering;</li>
+<li>Holdings of $1561$ investors in a larger universe of $449$ companies, for collaborative filtering; and </li>
+<li>The top $30$ investors and their holdings in the core universe of $211$ companies, used for the classification models</li>
+</ul>
 </li>
 </ul>
-<h2 id="Context-">Context <a name="context" /><a class="anchor-link" href="#Context-">&#182;</a></h2><p>Institutional investors are firms which invest on behalf of a group of people professionally. Pension funds are a good example of this: as someone pays into their pension over their working life, they generally seek to obtain a return greater than that available e.g. through depositing cash in a bank. This entails choices about the myriad asset classes (e.g. public equity, fixed income, real estate, private equity), and about the many potential investments available within each asset class. To take UK equities as an example; there are over $2000$ companies listed on the London Stock Exchange at the time of writing and this number has been higher in the past. The potential for significant combinatorial complexity and the often nontrivial nature of evaluating individual potential investments means that much investment is therefore outsourced to professionals.</p>
+<h2 id="Context-">Context <a name="context" /><a class="anchor-link" href="#Context-">&#182;</a></h2><p>Institutional investors are firms which invest on behalf of a group of people professionally. Pension funds are a good example of this: as someone pays into their pension over their working life, they generally seek to obtain a return greater than that available e.g. through depositing cash in a bank. This entails choices about the myriad asset classes (e.g. public equity, fixed income, real estate, private equity), and about the many potential investments available within each asset class. To take UK equities as an example; there are over $2000$ companies listed on the London Stock Exchange at the time of writing and this number has been higher in the past. The potential for significant combinatorial complexity, portfolio effects<sup class="footnote-ref" id="fnref-fn_m"><a href="#fn-fn_m">1</a></sup> and the often nontrivial nature of evaluating individual potential investments means that much investment is therefore outsourced to professionals.</p>
 <p>Many large pension funds and insurers invest significantly in UK equities and a fund manager, either at the institution itself or at a third party asset manager, will have the job of selecting shares to invest in. The investment selection process can be seen as like a funnel, where ideas for specific shares are sought, along with a hypothesis as to why it may be a good investment, from a variety of sources. These can then be evaluated and the number of potential investments reduced.</p>
 <p>Such buy-side firms will employ research analysts whose job is to unearth the best prospects within a given subset of potential investments e.g.  European technology companies, or US oil and gas companies. Additionally, fund managers meet management of many companies and will have their own ideas. Certain sell-side firms also do research, and salespeople at sell-side firms will provide ideas to fund managers with the goal of generating trading commission.</p>
-<p>The goal of this project is to provide a proxy for this idea provision by sell-side salespeople through a recommendation engine. The project uses data for $211$ larger-capitalisation UK public companies for which good data are available and excludes banks and insurers, for the sake of simplicity when generating features from accounting data.<sup class="footnote-ref" id="fnref-fn0"><a href="#fn-fn0">1</a></sup></p>
-<h2 id="Methodology-and-model-overview-">Methodology and model overview <a name="method" /><a class="anchor-link" href="#Methodology-and-model-overview-">&#182;</a></h2><p>An almost arbitrary number of recommendations, $k$, can be provided.<sup class="footnote-ref" id="fnref-fn1"><a href="#fn-fn1">2</a></sup> Recommendations are ranked, such that the best recommendation is included in any list of recommendations. $10$ recommendations is the default.</p>
+<p>The goal of this project is to provide a proxy for this idea provision by sell-side salespeople through a recommendation engine. The project uses data for $211$ larger-capitalisation UK public companies for which good data are available and excludes banks and insurers, for the sake of simplicity when generating features from accounting data.<sup class="footnote-ref" id="fnref-fn0"><a href="#fn-fn0">2</a></sup></p>
+<h2 id="Methodology-and-model-overview-">Methodology and model overview <a name="method" /><a class="anchor-link" href="#Methodology-and-model-overview-">&#182;</a></h2><p>An almost arbitrary number of recommendations, $k$, can be provided.<sup class="footnote-ref" id="fnref-fn1"><a href="#fn-fn1">3</a></sup> Recommendations are ranked, such that the best recommendation is included in any list of recommendations. $10$ recommendations is the default.</p>
 <p>In order to provide overall recommendations, three separate approaches are used. These are:</p>
 <ol>
 <li>Collaborative filtering</li>
 <li>Content filtering</li>
-<li>Classification model(s)</li>
+<li>Binary classification model(s), particularly in relation to the probability they ascribe to the positive class</li>
 </ol>
-<h3 id="Collaborative-filtering-">Collaborative filtering <a name="colab" /><a class="anchor-link" href="#Collaborative-filtering-">&#182;</a></h3><p>Collaborative filtering is a common methodology in recommendation engines, using ratings of items given by users where available to estimate those that are not.</p>
+<h3 id="1.-Collaborative-filtering-">1. Collaborative filtering <a name="colab" /><a class="anchor-link" href="#1.-Collaborative-filtering-">&#182;</a></h3><p>Collaborative filtering is a common methodology in recommendation engines, using ratings of items given by users where available to estimate those that are not.</p>
 <p>In the context of users, items and ratings, a missing rating is estimated by taking the overall average rating and adjusting this to reflect both the rating bias of the specific user and the specific item.</p>
-<p>In the context of investors, shares and percentage shareholdings, a shareholding of $0$ -- i.e. a company in which the investor is not invested -- is deemed to be missing and is 'estimated' by taking the overall average shareholding  and adjusting this to reflect the holding bias of the specific investor and the holding bias of the specific company. The former of these should have more impact because the percentage shareholdings would be expected to sum to $100$. In practice, however, the sum of the percentage holdings will be $&lt;100$ because of the inherently incomplete nature of third-party share register data.</p>
+<p>In the context of investors, shares and percentage shareholdings, a shareholding of $0$ -- i.e. a company in which the investor is not invested -- is deemed to be missing and is 'estimated' by taking the overall average shareholding  and adjusting this to reflect the holding bias of the specific investor and the holding bias of the specific company. The former of these should have more impact because the percentage shareholdings would be expected to sum to $100$. In practice, however, the sum of the percentage holdings will be $&lt;100 \%$ because of the inherently approximate nature of third-party share register data.</p>
 <p>By then ranking these 'estimated' holdings for a given investor, we can determine which $k$ potential investments to recommend.</p>
-<h3 id="Content-based-filtering-">Content-based filtering <a name="content" /><a class="anchor-link" href="#Content-based-filtering-">&#182;</a></h3><p>Content-based filtering is another common approach to recommendation engines, relying on similarity between items.</p>
+<h3 id="2.-Content-based-filtering-">2. Content-based filtering <a name="content" /><a class="anchor-link" href="#2.-Content-based-filtering-">&#182;</a></h3><p>Content-based filtering is another common approach to recommendation engines, relying on similarity between items.</p>
 <p>In the context of users, items and ratings, items are compared in order to establish their similarity, and then recommended based on their similarity to items which have been highly rated by a given user already.</p>
 <p>In the context of investors, shares and percentage shareholdings, the features of the companies are compared. More specifically, for the portfolio of companies in which the investor is known to have invested, the most similar companies are found for each company. For each comparison of a company in the portfolio and the $210$ other companies for which we have data, cosine similarity is calculated. This can be thought of as a similarity score.</p>
 <p>These are then aggregated, so that the company which is similar to many companies in the portfolio is accorded a higher score than the company which is similar to only one.</p>
 <p>After this aggregation step, the top $k$ best scoring companies overall are returned.</p>
-<h3 id="Recommendations-using-classification-model-probabilities--">Recommendations using classification model probabilities  <a name="classify" /><a class="anchor-link" href="#Recommendations-using-classification-model-probabilities--">&#182;</a></h3><p>Classification models use supervised learning techniques to predict a classification associated with a given set of features.</p>
+<h3 id="3.-Recommendations-using-binary-classification-model-probabilities--">3. Recommendations using binary classification model probabilities  <a name="classify" /><a class="anchor-link" href="#3.-Recommendations-using-binary-classification-model-probabilities--">&#182;</a></h3><p>Classification models use supervised learning techniques to predict a classification associated with a given set of features.</p>
 <p>In the context of investors, shares and percentage shareholdings, we know which investors have chosen to invest in which companies, either at all (i.e. they hold $0$ shares or $&gt;0$ shares) or above a certain <em>de minimis</em> threshold.</p>
 <p>In this case a <em>de minimis</em> threshold of $0.25 \%$ is used to filter the feature matrix before use. Holdings $&lt;0.25 \%$ therefore become the negative and holdings $&gt;0.25 \%$ become the positive class. A holding of $0.25 \%$, therefore, becomes the implied decision boundary for the estimates. The purpose here is to acknowledge the inexact nature of the register data and train the models on a somewhat stronger signal by raising the threshold somewhat.</p>
-<p>The choice of $0.25 \%$  is essentially arbitrary however it removes many of the investors in the holdings matrix, retaining around 1/8th of this before this by reducing the number from $19914$ to $2568$ . Missing values are then replaced with 0 and the holdings are binarised such that $y \to 1 \text{ if } y \gt 0$.</p>
+<p>The choice of $0.25 \%$  is essentially arbitrary however it removes many of the investors in the holdings matrix, retaining around 1/8th of the holdings by reducing the number from $19914$ to $2568$. Missing values are then replaced with 0 and the holdings are binarised such that $y \to 1 \text{ if } y \gt 0$.</p>
 <p>Shown below is the effect on the distribution.</p>
 <p><img src="class_data_treat.png" alt="alt text"></p>
-<p>Three classification models are each trained on $80 \%$ of data and then the predictions for investment or not are tested against the remaining $20 \%$ of data, the test set. The model that achieves the highest precision score on the test set is then used to make recommendations.</p>
-<p>Because classification models work best when there is not a significant disparity between the classes -- in this case invested or not invested -- it is only practicable to run the models for some of the larger investors where there class imbalance is within certain bounds.</p>
-<p>For this reason, these models have been undertaken for the top $30$ investors only. Even so, there is still significant class imbalance at the top (L&amp;G) and the bottom (Capital Research) of this subset. It was decided to stop at the top $30$ investors because class imbalance becomes more of an issue as the negative class -- not invested -- becomes more and more predominant as we go down the list of the most broadly invested investors.</p>
-<p>In order to deal with class imbalance, random oversampling of the least represented class is undertaken in order to achieve class balance.</p>
-<p>To then generate the predictions from the classification models, shares the investor already holds are discarded and the remaining shares are ordered by the probability of being invested. The top $k$ serve as recommendations, being those shares that the model thinks the investor is most likely to invest in, within the subset of shares that the investor is not invested in.</p>
+<p>Three classification models are each trained on $80 \%$ of data and then the classification predictions (invested or not invested) are tested against the remaining $20 \%$ of data, the test set. The model that achieves the highest precision score on the test set is then used to make recommendations.</p>
+<p>Because classification models work best when there is not a significant disparity between the classes -- in this case invested or not invested -- it is only practicable to run the models for some of the larger investors where class imbalance is within certain bounds.</p>
+<p>For this reason, these models have been undertaken for the top $30$ investors only. Even so, there is still significant class imbalance at the top (L&amp;G) and the bottom (Capital Research) of this subset. It was decided to stop at the top $30$ investors because class imbalance becomes more of an issue going down the ranked list as the negative class -- not invested -- becomes more and more predominant.</p>
+<p>In order to deal with class imbalance, random oversampling of the least represented class is undertaken in order to train the models on balanced classes.</p>
+<p>To then generate the predictions from the classification models, shares the investor already holds are discarded and the remaining shares are ordered by the probability of being invested. The top $k$ serve as recommendations, being those shares that the model thinks the investor is most likely to invest in, within the subset of shares that the investor is not actually invested in.</p>
 <h3 id="Model-aggregation--">Model aggregation  <a name="aggregation" /><a class="anchor-link" href="#Model-aggregation--">&#182;</a></h3><p>As many of the three models are used as possible. By way of example:</p>
 <ul>
 <li><p>For an investor in the top $30$, collaborative filtering, content filtering and classification models are used, because such an investor will be in the training data for all three.</p>
@@ -13192,14 +13197,22 @@ div#notebook {
 <li><p>For an unseen investor which is not in the set of $1561$ used to train the collaborative filtering model, content-based filtering can still be used as long as as their portfolio is known. In this case, the other two models would not be able to be used due to absence from the training data.</p>
 </li>
 </ul>
-<p>Given the $k$ recommendations from each of applicable models, the respective scores and/or probabilities are then scaled to $[0,1]$ so that the strength of a recommendation from each approach is comparable. These are then combined into one list and sorted and then then top $k$ taken again. To avoid any ties in the sorting, a small random value $[0,0.1]$ is added to each.</p>
+<p>Given the $k$ recommendations from each of applicable models, the respective scores and/or probabilities are then scaled to $[0,1]$ so that the strength of a recommendation from each approach is comparable. These are then combined into one list and sorted with the top $k$ being taken again. To avoid any ties in the sorting, a small random value $[0,0.1]$ is added to each.</p>
 <h2 id="Variables--">Variables  <a name="var" /><a class="anchor-link" href="#Variables--">&#182;</a></h2><h3 id="Collaborative-filtering--">Collaborative filtering  <a name="colabvar" /><a class="anchor-link" href="#Collaborative-filtering--">&#182;</a></h3><p>A $1561 \times 449$ matrix of shareholdings is used as the training data for collaborative filtering, covering $1561$ investors and shares in $449$ companies, representing most of the FTSE All-Share ex-investment companies. These $1561$ investors are drawn from a larger dataset of $19914$, and represent those investors with $&gt;5$ holdings within the matrix.</p>
-<h3 id="Content-filtering--">Content filtering  <a name="contentvar" /><a class="anchor-link" href="#Content-filtering--">&#182;</a></h3><p>A $211 \times 327$ matrix of shareholdings is used as the training data for content filtering, representing shares in $221$ companies and $327$ features associated with those companies. The $221$ companies represent the subset of the FTSE All-Share ex-investment companies index of UK-listed public companies for which the full set of feature data is available at the time of writing.</p>
+<h3 id="Content-filtering--">Content filtering  <a name="contentvar" /><a class="anchor-link" href="#Content-filtering--">&#182;</a></h3><p>A $211 \times 327$ matrix of shareholdings is used as the training data for content filtering, representing shares in $221$ companies and $327$ features associated with those companies. The $221$ companies represent the subset of the FTSE All-Share ex-investment companies index of UK-listed public companies for which the full set of feature data is available at the time of writing, excluding banks and insurers.</p>
 <p>These features include:</p>
 <ul>
 <li>Features derived from financial estimates -- using revenue, EBITDA, EBIT, PBT, EPS and DPS for FY1-3, where FY1 is the next forward financial year end e.g. Dec-19E, FY2 the next after that e.g. Dec-20E etc. See appendix for transformations on these data</li>
-<li>Type of business: Economic, Business, Industry Group, Industry and Activity classifications under <a href="https://en.wikipedia.org/wiki/Thomson_Reuters_Business_Classification">TRBC</a></li>
-<li>Certain market data: price/mean price target and mean buy/hold/sell recommendation (both proxies for sell-side endorsement), number of EPS estimates (a proxy for coverage), EPS estimate diffusion (proxy for revisions), NTM P/E (proxy for valuation)</li>
+<li>Type of business: Economic, Business, Industry Group, Industry and Activity classifications<sup class="footnote-ref" id="fnref-fn-trbc"><a href="#fn-fn-trbc">4</a></sup></li>
+</ul>
+<ul>
+<li>Certain market data:<ul>
+<li>Price/mean price target and mean buy/hold/sell recommendation, both proxies for sell-side endorsement; </li>
+<li>Number of EPS estimates, a proxy for sell-side coverage;</li>
+<li>EPS estimate diffusion, a proxy for estimate revisions; and</li>
+<li>NTM P/E, a yardstick for valuation</li>
+</ul>
+</li>
 </ul>
 <h3 id="Classification-models--">Classification models  <a name="classifyvar" /><a class="anchor-link" href="#Classification-models--">&#182;</a></h3><p>A $30 \times 211$ matrix is used as the training data for the classification models, being the top $30$ investors when ranked by number of investments in the $211$ companies included the feature matrix for the content filtering.</p>
 <p>The top 30 investors by number of investments is shown below. This is after filtering to only include holdings $&gt; 0.25 \%$.</p>
@@ -13259,7 +13272,7 @@ div#notebook {
 </tbody>
 </table>
 <p>After fitting the model using SVD on a training set representing $80 \%$ of the data, the worst and the best predictions against a test set of $20 \%$ of the data were obtained and examined. SVD achieved an RMSE of $1.01$ on the test data, comparable to that from cross validation, and MAE of $0.364$.</p>
-<p>Best and worst predictions from the model are shown below. The best predictions are not particularly informative as these were all small holdings which were correctly predicted. $I_u$ represents the number of holdings in the dataset belonging to a given investor and $U_i$ represents the number of investors that are known to hold shares in the company.</p>
+<p>Best and worst predictions from the model are shown below. The best predictions are not particularly informative as these were all small holdings which were correctly predicted. $I_u$ represents the number of holdings in the dataset belonging to a given investor and $U_i$ represents the number of investors that are thought to hold shares in the company.</p>
 <table>
 <thead><tr>
 <th style="text-align:left">inv</th>
@@ -13365,7 +13378,7 @@ div#notebook {
 </tbody>
 </table>
 <p>For the best predictions, the mean $I_u$ is 33 and the mean $U_i$ is 365.</p>
-<p>The worst predictions are all significant actual holdings with reasonably low estimates.</p>
+<p>The worst predictions are all significant actual holdings with comparably low estimates.</p>
 <table>
 <thead><tr>
 <th style="text-align:left">inv</th>
@@ -13470,7 +13483,7 @@ div#notebook {
 </tr>
 </tbody>
 </table>
-<p>For the worst predictions, the mean $I_u$ is 133 and the mean $U_i$ is 116. The model therefore seems to perform better for smaller investors (i.e. investors who hold fewer companies) investing in companies with less concentrated share registers.</p>
+<p>For the worst predictions, the mean $I_u$ is 133 and the mean $U_i$ is 116. The model therefore seems to perform better for smaller investors (i.e. investors who hold fewer companies) investing in companies with more concentrated share registers.</p>
 <p>The histogram of the errors and absolute errors on the predictions made on the test set is below. As would be expected given RMSE $\sim 1 \%$, most predictions have small error with only a small number of predictions having significant error.</p>
 <p><img src="pred_errors.png" alt="alt text"></p>
 <p>Comparing estimated and predicted holdings, it can be seen that collaborative filtering systematically over-estimates the smaller holdings and under-estimates the larger ones.</p>
@@ -13582,7 +13595,7 @@ FRES.L Fresnillo 16</code></pre>
 </tr>
 </tbody>
 </table>
-<p>Predictions are produced for each of the three models over the whole dataset, both training and test. The predictions made by the model with the best precision -- in this case SVM -- are used, with the invested class probabilities ranked once the shares already held by that investor have been eliminated.</p>
+<p>Predictions are produced for each of the three models over the whole dataset, both training and test. The predictions made by the model with the best precision on the test set -- in this case SVM -- are used, with the invested class probabilities ranked once the shares already held by that investor have been removed.</p>
 <p>Precision scores for the various models over the $30$ top investors are shown below.</p>
 <p><img src="pic5.png" alt="alt text"></p>
 <p>Overall, AdaBoost produces the highest mean precision score and the lowest standard deviation of precision scores.</p>
@@ -13609,6 +13622,8 @@ FRES.L Fresnillo 16</code></pre>
 </tr>
 </tbody>
 </table>
+<p>Improvement in accuracy in comparison to the baseline is shown below.</p>
+<p><img src="accuracy.png" alt="alt text"></p>
 <h2 id="Appendix--">Appendix  <a name="appendix" /><a class="anchor-link" href="#Appendix--">&#182;</a></h2><p><strong>Financial feature transformations</strong> each undertaken for Revenue, EBITDA, EBIT, PBT, EPS and DPS are:</p>
 <ul>
 <li>ACAG</li>
@@ -13625,11 +13640,13 @@ FRES.L Fresnillo 16</code></pre>
 <p>TRTL is the nadir period relative to the latest period i.e. $\text{min}(FY_1,FY_2,FY_3) / FY_3$</p>
 <p>GYP is growth periods out of the number of periods less 1 e.g. if growth in FY2 and FY3 it will be $1$.</p>
 <p>PPP is positive periods proportion i.e. the proportion of the periods for which the metric is $&gt;0$.</p>
-<p>SD and MEAN are used to calculate $\log_{10} (\hat x/\sigma_{x})$ and then discarded, with $\log_{10} (\hat x/\sigma_{x})$ being retained as a feature.</p>
+<p>SD and MEAN are used to calculate $\log_{10} (\bar x/\sigma_{x})$ and then discarded, with $\log_{10} (\bar x/\sigma_{x})$ being retained as a feature.</p>
 <div class="footnotes">
 <hr>
-<ol><li id="fn-fn0"><p>The accounts of financial firms are significantly different to those of e.g. manufacturers and retailers.<a href="#fnref-fn0" class="footnote">&#8617;</a></p></li>
-<li id="fn-fn1"><p>Although it should be said that these become less useful as $k \to 211$.<a href="#fnref-fn1" class="footnote">&#8617;</a></p></li>
+<ol><li id="fn-fn_m"><p>e.g. covariance between assets, <em>pace</em> Markowitz.<a href="#fnref-fn_m" class="footnote">&#8617;</a></p></li>
+<li id="fn-fn0"><p>The accounts of financial firms are significantly different to those of e.g. manufacturers and retailers.<a href="#fnref-fn0" class="footnote">&#8617;</a></p></li>
+<li id="fn-fn1"><p>Clearly these become less useful as $k \to 211$.<a href="#fnref-fn1" class="footnote">&#8617;</a></p></li>
+<li id="fn-fn-trbc"><p><a href="https://en.wikipedia.org/wiki/Thomson_Reuters_Business_Classification">TRBC</a> is used for this.<a href="#fnref-fn-trbc" class="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
