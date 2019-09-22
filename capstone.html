@@ -13660,9 +13660,43 @@ FRES.L Fresnillo 16</code></pre>
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">mycode</span> <span class="k">import</span> <span class="o">*</span>
 
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">simplefilter</span>
+<span class="n">simplefilter</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">)</span>
+
 <span class="kn">from</span> <span class="nn">sklearn.externals</span> <span class="k">import</span> <span class="n">joblib</span>
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">MinMaxScaler</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;precision&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_sec</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s1">&#39;./securites.pickle&#39;</span><span class="p">)</span>
+<span class="n">df_colab_recs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s1">&#39;./colab_recs.pickle&#39;</span><span class="p">)</span>
+<span class="n">class_probs</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;./prob_recs.sav&#39;</span><span class="p">)</span>
+<span class="n">cont_filt_sims</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;./co_similarities.sav&#39;</span><span class="p">)</span>
+<span class="n">df_cf_holdings</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s1">&#39;./sparse_reg.pickle&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Institutional investors for which classification probabilities can be used:</span><span class="se">\n</span><span class="s1">---</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">class_probs</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
 </pre></div>
 
     </div>
@@ -13678,60 +13712,13 @@ FRES.L Fresnillo 16</code></pre>
     <div class="prompt"></div>
 
 
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/anaconda3/lib/python3.6/site-packages/sklearn/externals/joblib/__init__.py:15: DeprecationWarning: sklearn.externals.joblib is deprecated in 0.21 and will be removed in 0.23. Please import this functionality directly from joblib, which can be installed with: pip install joblib. If this warning is raised when loading pickled models, you may need to re-serialize those models with scikit-learn 0.21+.
-  warnings.warn(msg, category=DeprecationWarning)
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Institutional investors for which classification probabilities can be used:
+---
+
+[&#39;AXA Investment Managers UK Ltd.&#39;, &#39;Aberdeen Asset Investments Limited&#39;, &#39;Aberdeen Standard Investments (Edinburgh)&#39;, &#39;Artemis Investment Management LLP&#39;, &#39;Aviva Investors Global Services Limited&#39;, &#39;BlackRock Advisors (UK) Limited&#39;, &#39;BlackRock Institutional Trust Company, N.A.&#39;, &#39;BlackRock Investment Management (UK) Ltd.&#39;, &#39;Capital Research Global Investors&#39;, &#39;Columbia Threadneedle Investments (UK)&#39;, &#39;Dimensional Fund Advisors, L.P.&#39;, &#39;Fidelity International&#39;, &#39;Fidelity Management &amp; Research Company&#39;, &#39;HSBC Global Asset Management (UK) Limited&#39;, &#39;INVESCO Asset Management Limited&#39;, &#39;Investec Asset Management Ltd.&#39;, &#39;JPMorgan Asset Management U.K. Limited&#39;, &#39;Jupiter Asset Management Ltd.&#39;, &#39;Legal &amp; General Investment Management Ltd.&#39;, &#39;M &amp; G Investment Management Ltd.&#39;, &#39;Norges Bank Investment Management (NBIM)&#39;, &#39;Nuveen LLC&#39;, &#39;Royal London Asset Management Ltd.&#39;, &#39;Schroder Investment Management Ltd. (SIM)&#39;, &#39;State Street Global Advisors (UK) Ltd.&#39;, &#39;State Street Global Advisors (US)&#39;, &#39;The Vanguard Group, Inc.&#39;, &#39;UBS Asset Management (UK) Ltd.&#39;, &#39;Vanguard Capital&#39;, &#39;Vanguard Global Advisers LLC&#39;]
 </pre>
 </div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_sec</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s1">&#39;./securites.pickle&#39;</span><span class="p">)</span>
-<span class="n">df_colab_recs</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s1">&#39;./colab_recs.pickle&#39;</span><span class="p">)</span>
-<span class="n">class_probs</span><span class="o">=</span><span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;./prob_recs.sav&#39;</span><span class="p">)</span>
-<span class="n">cont_filt_sims</span><span class="o">=</span><span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;./co_similarities.sav&#39;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">class_probs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[3]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>dict_keys([&#39;Fidelity International&#39;, &#39;Legal &amp; General Investment Management Ltd.&#39;, &#39;Aberdeen Asset Investments Limited&#39;, &#39;M &amp; G Investment Management Ltd.&#39;, &#39;State Street Global Advisors (UK) Ltd.&#39;, &#39;BlackRock Institutional Trust Company, N.A.&#39;, &#39;The Vanguard Group, Inc.&#39;, &#39;Vanguard Global Advisers LLC&#39;, &#39;Norges Bank Investment Management (NBIM)&#39;, &#39;BlackRock Investment Management (UK) Ltd.&#39;, &#39;Dimensional Fund Advisors, L.P.&#39;, &#39;Royal London Asset Management Ltd.&#39;, &#39;Schroder Investment Management Ltd. (SIM)&#39;, &#39;BlackRock Advisors (UK) Limited&#39;, &#39;Aviva Investors Global Services Limited&#39;, &#39;Aberdeen Standard Investments (Edinburgh)&#39;, &#39;HSBC Global Asset Management (UK) Limited&#39;, &#39;JPMorgan Asset Management U.K. Limited&#39;, &#39;Columbia Threadneedle Investments (UK)&#39;, &#39;Vanguard Capital&#39;, &#39;State Street Global Advisors (US)&#39;, &#39;Fidelity Management &amp; Research Company&#39;, &#39;UBS Asset Management (UK) Ltd.&#39;, &#39;Artemis Investment Management LLP&#39;, &#39;Investec Asset Management Ltd.&#39;, &#39;Jupiter Asset Management Ltd.&#39;, &#39;AXA Investment Managers UK Ltd.&#39;, &#39;INVESCO Asset Management Limited&#39;, &#39;Nuveen LLC&#39;, &#39;Capital Research Global Investors&#39;])</pre>
-</div>
-
 </div>
 
 </div>
@@ -13743,7 +13730,8 @@ FRES.L Fresnillo 16</code></pre>
 <div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cont_filt_sims</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cos for which content filtering can be used:</span><span class="se">\n</span><span class="s1">---</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cont_filt_sims</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
 </pre></div>
 
     </div>
@@ -13756,15 +13744,16 @@ FRES.L Fresnillo 16</code></pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[4]:</div>
+    <div class="prompt"></div>
 
 
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Cos for which content filtering can be used:
+---
 
-
-<div class="output_text output_subarea output_execute_result">
-<pre>dict_keys([&#39;FSTA.L&#39;, &#39;ESNT.L&#39;, &#39;CRDA.L&#39;, &#39;UDG.L&#39;, &#39;ANTO.L&#39;, &#39;MONY.L&#39;, &#39;MRW.L&#39;, &#39;NXR.L&#39;, &#39;BBOXT.L&#39;, &#39;CARDC.L&#39;, &#39;KMR.L&#39;, &#39;SNNS.L&#39;, &#39;SSPG.L&#39;, &#39;EZJ.L&#39;, &#39;JLG.L&#39;, &#39;ROR.L&#39;, &#39;GRG.L&#39;, &#39;SGE.L&#39;, &#39;NRRT.L&#39;, &#39;MGGT.L&#39;, &#39;GNK.L&#39;, &#39;IWG.L&#39;, &#39;SRP.L&#39;, &#39;IPF.L&#39;, &#39;ICAG.L&#39;, &#39;REL.L&#39;, &#39;RIV.L&#39;, &#39;SMIN.L&#39;, &#39;TLW.L&#39;, &#39;AZN.L&#39;, &#39;FSJ.L&#39;, &#39;TTG.L&#39;, &#39;HTG.L&#39;, &#39;BAG.L&#39;, &#39;CTEC.L&#39;, &#39;TATE.L&#39;, &#39;KCT.L&#39;, &#39;WPP.L&#39;, &#39;FRES.L&#39;, &#39;ERM.L&#39;, &#39;PFC.L&#39;, &#39;COSG.L&#39;, &#39;HWDN.L&#39;, &#39;SGRO.L&#39;, &#39;GOCO.L&#39;, &#39;TW.L&#39;, &#39;DRX.L&#39;, &#39;HLMA.L&#39;, &#39;III.L&#39;, &#39;BIFF.L&#39;, &#39;HIK.L&#39;, &#39;EVRE.L&#39;, &#39;GFS.L&#39;, &#39;CCC.L&#39;, &#39;CWK.L&#39;, &#39;CNA.L&#39;, &#39;MARS.L&#39;, &#39;RAT.L&#39;, &#39;COB.L&#39;, &#39;BKGH.L&#39;, &#39;EQN.L&#39;, &#39;RB.L&#39;, &#39;BBA.L&#39;, &#39;BALF.L&#39;, &#39;WEIR.L&#39;, &#39;IMI.L&#39;, &#39;MRON.L&#39;, &#39;SYNTS.L&#39;, &#39;NMC.L&#39;, &#39;SAGAG.L&#39;, &#39;NEX.L&#39;, &#39;GHGG.L&#39;, &#39;CPG.L&#39;, &#39;SVS.L&#39;, &#39;ELM.L&#39;, &#39;SPT.L&#39;, &#39;VVO.L&#39;, &#39;RHIM.L&#39;, &#39;GVC.L&#39;, &#39;DGE.L&#39;, &#39;LIO.L&#39;, &#39;BVS.L&#39;, &#39;QLT.L&#39;, &#39;RTN.L&#39;, &#39;WMH.L&#39;, &#39;QQ.L&#39;, &#39;INF.L&#39;, &#39;SCTS.L&#39;, &#39;SNR.L&#39;, &#39;DSCV.L&#39;, &#39;WTB.L&#39;, &#39;MTO.L&#39;, &#39;SDRY.L&#39;, &#39;PTEC.L&#39;, &#39;MKS.L&#39;, &#39;IMB.L&#39;, &#39;GNC.L&#39;, &#39;EXPN.L&#39;, &#39;BRBY.L&#39;, &#39;OTB.L&#39;, &#39;ZTF.L&#39;, &#39;CLSH.L&#39;, &#39;BVIC.L&#39;, &#39;XPP.L&#39;, &#39;AGGK.L&#39;, &#39;MSLH.L&#39;, &#39;MNZS.L&#39;, &#39;DOM.L&#39;, &#39;SLA.L&#39;, &#39;GSK.L&#39;, &#39;TYMN.L&#39;, &#39;PAGE.L&#39;, &#39;BP.L&#39;, &#39;VCTX.L&#39;, &#39;IBST.L&#39;, &#39;CAPCC.L&#39;, &#39;ETO.L&#39;, &#39;HFD.L&#39;, &#39;MERG.L&#39;, &#39;JD.L&#39;, &#39;ABF.L&#39;, &#39;TALK.L&#39;, &#39;TPK.L&#39;, &#39;KLR.L&#39;, &#39;RTO.L&#39;, &#39;RMV.L&#39;, &#39;SBRY.L&#39;, &#39;FLTRF.L&#39;, &#39;RPS.L&#39;, &#39;DC.L&#39;, &#39;BT.L&#39;, &#39;MNDI.L&#39;, &#39;DIAL.L&#39;, &#39;SIA.L&#39;, &#39;HILS.L&#39;, &#39;GNS.L&#39;, &#39;BATS.L&#39;, &#39;ARWA.L&#39;, &#39;IGG.L&#39;, &#39;ISA.L&#39;, &#39;PSON.L&#39;, &#39;CRH.L&#39;, &#39;GYM.L&#39;, &#39;RWA.L&#39;, &#39;SPX.L&#39;, &#39;PSN.L&#39;, &#39;EMG.L&#39;, &#39;INCH.L&#39;, &#39;SPI.L&#39;, &#39;MDCM.L&#39;, &#39;JMAT.L&#39;, &#39;CCH.L&#39;, &#39;TCAPI.L&#39;, &#39;BRW.L&#39;, &#39;WG.L&#39;, &#39;TIFS.L&#39;, &#39;DPH.L&#39;, &#39;RR.L&#39;, &#39;SMWH.L&#39;, &#39;SN.L&#39;, &#39;VTC.L&#39;, &#39;PETSP.L&#39;, &#39;AVST.L&#39;, &#39;ITV.L&#39;, &#39;MGAMM.L&#39;, &#39;KGF.L&#39;, &#39;POLYP.L&#39;, &#39;MCRO.L&#39;, &#39;VSVS.L&#39;, &#39;PLP.L&#39;, &#39;SDR.L&#39;, &#39;HSW.L&#39;, &#39;SHB.L&#39;, &#39;FUTR.L&#39;, &#39;AAAA.L&#39;, &#39;NXT.L&#39;, &#39;GFTU_u.L&#39;, &#39;ITRK.L&#39;, &#39;CAL.L&#39;, &#39;BDEV.L&#39;, &#39;RSW.L&#39;, &#39;TRFT.L&#39;, &#39;CPI.L&#39;, &#39;VOD.L&#39;, &#39;AVV.L&#39;, &#39;MCLSM.L&#39;, &#39;CINE.L&#39;, &#39;SXS.L&#39;, &#39;MGNS.L&#39;, &#39;CEY.L&#39;, &#39;UTG.L&#39;, &#39;LOOK.L&#39;, &#39;SAFE.L&#39;, &#39;DVO.L&#39;, &#39;CKN.L&#39;, &#39;SMP.L&#39;, &#39;LSL.L&#39;, &#39;BAES.L&#39;, &#39;DCC.L&#39;, &#39;ULVR.L&#39;, &#39;FORT.L&#39;, &#39;BOY.L&#39;, &#39;GPOR.L&#39;, &#39;DTY.L&#39;, &#39;ASCL.L&#39;, &#39;LSE.L&#39;, &#39;TSCO.L&#39;, &#39;APTD.L&#39;, &#39;SDL.L&#39;, &#39;FOUR.L&#39;, &#39;ULE.L&#39;])</pre>
+[&#39;AAAA.L&#39;, &#39;ABF.L&#39;, &#39;AGGK.L&#39;, &#39;ANTO.L&#39;, &#39;APTD.L&#39;, &#39;ARWA.L&#39;, &#39;ASCL.L&#39;, &#39;AVST.L&#39;, &#39;AVV.L&#39;, &#39;AZN.L&#39;, &#39;BAES.L&#39;, &#39;BAG.L&#39;, &#39;BALF.L&#39;, &#39;BATS.L&#39;, &#39;BBA.L&#39;, &#39;BBOXT.L&#39;, &#39;BDEV.L&#39;, &#39;BIFF.L&#39;, &#39;BKGH.L&#39;, &#39;BOY.L&#39;, &#39;BP.L&#39;, &#39;BRBY.L&#39;, &#39;BRW.L&#39;, &#39;BT.L&#39;, &#39;BVIC.L&#39;, &#39;BVS.L&#39;, &#39;CAL.L&#39;, &#39;CAPCC.L&#39;, &#39;CARDC.L&#39;, &#39;CCC.L&#39;, &#39;CCH.L&#39;, &#39;CEY.L&#39;, &#39;CINE.L&#39;, &#39;CKN.L&#39;, &#39;CLSH.L&#39;, &#39;CNA.L&#39;, &#39;COB.L&#39;, &#39;COSG.L&#39;, &#39;CPG.L&#39;, &#39;CPI.L&#39;, &#39;CRDA.L&#39;, &#39;CRH.L&#39;, &#39;CTEC.L&#39;, &#39;CWK.L&#39;, &#39;DC.L&#39;, &#39;DCC.L&#39;, &#39;DGE.L&#39;, &#39;DIAL.L&#39;, &#39;DOM.L&#39;, &#39;DPH.L&#39;, &#39;DRX.L&#39;, &#39;DSCV.L&#39;, &#39;DTY.L&#39;, &#39;DVO.L&#39;, &#39;ELM.L&#39;, &#39;EMG.L&#39;, &#39;EQN.L&#39;, &#39;ERM.L&#39;, &#39;ESNT.L&#39;, &#39;ETO.L&#39;, &#39;EVRE.L&#39;, &#39;EXPN.L&#39;, &#39;EZJ.L&#39;, &#39;FLTRF.L&#39;, &#39;FORT.L&#39;, &#39;FOUR.L&#39;, &#39;FRES.L&#39;, &#39;FSJ.L&#39;, &#39;FSTA.L&#39;, &#39;FUTR.L&#39;, &#39;GFS.L&#39;, &#39;GFTU_u.L&#39;, &#39;GHGG.L&#39;, &#39;GNC.L&#39;, &#39;GNK.L&#39;, &#39;GNS.L&#39;, &#39;GOCO.L&#39;, &#39;GPOR.L&#39;, &#39;GRG.L&#39;, &#39;GSK.L&#39;, &#39;GVC.L&#39;, &#39;GYM.L&#39;, &#39;HFD.L&#39;, &#39;HIK.L&#39;, &#39;HILS.L&#39;, &#39;HLMA.L&#39;, &#39;HSW.L&#39;, &#39;HTG.L&#39;, &#39;HWDN.L&#39;, &#39;IBST.L&#39;, &#39;ICAG.L&#39;, &#39;IGG.L&#39;, &#39;III.L&#39;, &#39;IMB.L&#39;, &#39;IMI.L&#39;, &#39;INCH.L&#39;, &#39;INF.L&#39;, &#39;IPF.L&#39;, &#39;ISA.L&#39;, &#39;ITRK.L&#39;, &#39;ITV.L&#39;, &#39;IWG.L&#39;, &#39;JD.L&#39;, &#39;JLG.L&#39;, &#39;JMAT.L&#39;, &#39;KCT.L&#39;, &#39;KGF.L&#39;, &#39;KLR.L&#39;, &#39;KMR.L&#39;, &#39;LIO.L&#39;, &#39;LOOK.L&#39;, &#39;LSE.L&#39;, &#39;LSL.L&#39;, &#39;MARS.L&#39;, &#39;MCLSM.L&#39;, &#39;MCRO.L&#39;, &#39;MDCM.L&#39;, &#39;MERG.L&#39;, &#39;MGAMM.L&#39;, &#39;MGGT.L&#39;, &#39;MGNS.L&#39;, &#39;MKS.L&#39;, &#39;MNDI.L&#39;, &#39;MNZS.L&#39;, &#39;MONY.L&#39;, &#39;MRON.L&#39;, &#39;MRW.L&#39;, &#39;MSLH.L&#39;, &#39;MTO.L&#39;, &#39;NEX.L&#39;, &#39;NMC.L&#39;, &#39;NRRT.L&#39;, &#39;NXR.L&#39;, &#39;NXT.L&#39;, &#39;OTB.L&#39;, &#39;PAGE.L&#39;, &#39;PETSP.L&#39;, &#39;PFC.L&#39;, &#39;PLP.L&#39;, &#39;POLYP.L&#39;, &#39;PSN.L&#39;, &#39;PSON.L&#39;, &#39;PTEC.L&#39;, &#39;QLT.L&#39;, &#39;QQ.L&#39;, &#39;RAT.L&#39;, &#39;RB.L&#39;, &#39;REL.L&#39;, &#39;RHIM.L&#39;, &#39;RIV.L&#39;, &#39;RMV.L&#39;, &#39;ROR.L&#39;, &#39;RPS.L&#39;, &#39;RR.L&#39;, &#39;RSW.L&#39;, &#39;RTN.L&#39;, &#39;RTO.L&#39;, &#39;RWA.L&#39;, &#39;SAFE.L&#39;, &#39;SAGAG.L&#39;, &#39;SBRY.L&#39;, &#39;SCTS.L&#39;, &#39;SDL.L&#39;, &#39;SDR.L&#39;, &#39;SDRY.L&#39;, &#39;SGE.L&#39;, &#39;SGRO.L&#39;, &#39;SHB.L&#39;, &#39;SIA.L&#39;, &#39;SLA.L&#39;, &#39;SMIN.L&#39;, &#39;SMP.L&#39;, &#39;SMWH.L&#39;, &#39;SN.L&#39;, &#39;SNNS.L&#39;, &#39;SNR.L&#39;, &#39;SPI.L&#39;, &#39;SPT.L&#39;, &#39;SPX.L&#39;, &#39;SRP.L&#39;, &#39;SSPG.L&#39;, &#39;SVS.L&#39;, &#39;SXS.L&#39;, &#39;SYNTS.L&#39;, &#39;TALK.L&#39;, &#39;TATE.L&#39;, &#39;TCAPI.L&#39;, &#39;TIFS.L&#39;, &#39;TLW.L&#39;, &#39;TPK.L&#39;, &#39;TRFT.L&#39;, &#39;TSCO.L&#39;, &#39;TTG.L&#39;, &#39;TW.L&#39;, &#39;TYMN.L&#39;, &#39;UDG.L&#39;, &#39;ULE.L&#39;, &#39;ULVR.L&#39;, &#39;UTG.L&#39;, &#39;VCTX.L&#39;, &#39;VOD.L&#39;, &#39;VSVS.L&#39;, &#39;VTC.L&#39;, &#39;VVO.L&#39;, &#39;WEIR.L&#39;, &#39;WG.L&#39;, &#39;WMH.L&#39;, &#39;WPP.L&#39;, &#39;WTB.L&#39;, &#39;XPP.L&#39;, &#39;ZTF.L&#39;]
+</pre>
 </div>
-
 </div>
 
 </div>
@@ -13781,10 +13770,13 @@ FRES.L Fresnillo 16</code></pre>
 <span class="n">series_minmax</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">ps</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">MinMaxScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">ps</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">ps</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">flatten_list</span><span class="p">(</span><span class="n">list_</span><span class="p">):</span>
-    <span class="n">flat_l</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">flat_l</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">list_</span><span class="p">)):</span>
-        <span class="n">flat_l</span><span class="o">+=</span><span class="n">list_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">flat_l</span> <span class="o">+=</span> <span class="n">list_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">flat_l</span>
+
+<span class="k">def</span> <span class="nf">densify</span><span class="p">(</span><span class="n">df_s</span><span class="p">):</span>                                 
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">df_s</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">df_s</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">values</span><span class="p">)},</span> <span class="n">index</span><span class="o">=</span><span class="n">df_s</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">portfolio_content_recs</span><span class="p">(</span><span class="n">portfolio</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
     <span class="c1"># Get appropriate results</span>
@@ -13882,57 +13874,11 @@ FRES.L Fresnillo 16</code></pre>
 <div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">t_</span> <span class="o">=</span> <span class="n">recommend</span><span class="p">(</span><span class="s1">&#39;Investec Asset Management Ltd.&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">single_list</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">t_</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">t_</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_cf_holdings</span> <span class="o">=</span> <span class="n">densify</span><span class="p">(</span><span class="n">df_cf_holdings</span><span class="p">)</span>
+<span class="n">df_cf_holdings</span> <span class="o">=</span> <span class="n">df_cf_holdings</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Not using content filtering
-
-KMR.L      1.009
-STUS.L     0.947
-NXR.L      0.866
-RESIR.L    0.701
-CNCTC.L    0.489
-EPICE.L    0.303
-BIFF.L     0.264
-RECIV.L    0.218
-AEWU.L     0.058
-BALF.L     0.003
-dtype: float64
-
-ITRK.L    1.002
-SGRO.L    0.920
-GFS.L     0.725
-JD.L      0.403
-GPOR.L    0.290
-CRH.L     0.229
-BAES.L    0.161
-SAFE.L    0.070
-WEIR.L    0.065
-IWG.L     0.001
-dtype: float64
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -13942,7 +13888,15 @@ dtype: float64
 <div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">recs_friendly_wrapper</span><span class="p">(</span><span class="s1">&#39;California State Teachers Retirement System&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Example of three seperate lists</span>
+<span class="n">i_</span> <span class="o">=</span> <span class="s1">&#39;Investec Asset Management Ltd.&#39;</span>
+<span class="n">t_</span> <span class="o">=</span> <span class="n">recommend</span><span class="p">(</span><span class="n">i_</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">single_list</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;All three lists for&#39;</span><span class="p">,</span> <span class="n">i_</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Collaborative filtering recs</span><span class="se">\n</span><span class="s1">---</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">t_</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Class prediction recs</span><span class="se">\n</span><span class="s1">---</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">t_</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Content filtering recs</span><span class="se">\n</span><span class="s1">---</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">t_</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 </pre></div>
 
     </div>
@@ -13959,20 +13913,53 @@ dtype: float64
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Not using classification probabilities
-Not using content filtering
+<pre>All three lists for Investec Asset Management Ltd.
 
+Collaborative filtering recs
+---
 
-RESIR.L Residential Secure Income PLC 1.00
-AEWU.L AEW UK REIT PLC 0.82
-BVC.L Batm Advanced Communications Ltd 0.81
-EPICE.L Ediston Property Investment Company PLC 0.64
-SERE.L Schroder European Real Estate Investment Trust PLC 0.37
-SOHO.L Triple Point Social Housing REIT PLC 0.30
-TEG.L Ten Entertainment Group PLC 0.27
-STUS.L Studio Retail Group PLC 0.09
-TRFT.L Trifast PLC 0.08
-IHR.L Impact Healthcare REIT PLC 0.00
+ KMR.L      1.007
+STUS.L     0.943
+NXR.L      0.866
+RESIR.L    0.703
+CNCTC.L    0.490
+EPICE.L    0.307
+BIFF.L     0.270
+RECIV.L    0.220
+AEWU.L     0.059
+BALF.L     0.004
+dtype: float64
+
+Class prediction recs
+---
+
+ ITRK.L    1.001
+SGRO.L    0.920
+GFS.L     0.726
+JD.L      0.406
+GPOR.L    0.297
+CRH.L     0.223
+BAES.L    0.157
+SAFE.L    0.073
+WEIR.L    0.069
+IWG.L     0.004
+dtype: float64
+
+Content filtering recs
+---
+
+ Instrument
+GOCO.L    1.003e+00
+PFC.L     8.477e-01
+DIAL.L    6.254e-01
+KMR.L     5.740e-01
+FRES.L    4.985e-01
+EVRE.L    4.408e-01
+GNK.L     3.876e-01
+SRP.L     2.153e-01
+NMC.L     5.720e-02
+PSN.L     6.515e-04
+dtype: float64
 </pre>
 </div>
 </div>
@@ -13986,7 +13973,11 @@ IHR.L Impact Healthcare REIT PLC 0.00
 <div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">recs_friendly_wrapper</span><span class="p">(</span><span class="s1">&#39;BlackRock Advisors (UK) Limited&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Combined list based on collaborative filtering and content filtering lists</span>
+
+<span class="n">i_</span> <span class="o">=</span> <span class="s1">&#39;California State Teachers Retirement System&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Combined list based on collaborative filtering and content filtering lists for&#39;</span><span class="p">,</span> <span class="n">i_</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">recs_friendly_wrapper</span><span class="p">(</span><span class="n">i_</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -14003,18 +13994,21 @@ IHR.L Impact Healthcare REIT PLC 0.00
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Not using content filtering
+<pre>Combined list based on collaborative filtering and content filtering lists for California State Teachers Retirement System 
+
+Not using classification probabilities
 
 
-SDR.L Schroders PLC 1.61
-SERE.L Schroder European Real Estate Investment Trust PLC 1.01
-WEIR.L Weir Group PLC 1.00
-RESIR.L Residential Secure Income PLC 0.69
-AEWU.L AEW UK REIT PLC 0.65
-DPEU.L DP Eurasia NV 0.38
-AGGK.L Aggreko PLC 0.16
-MARS.L Marston&#39;s PLC 0.13
-FSTA.L Fuller Smith &amp; Turner PLC 0.13
+RESIR.L Residential Secure Income PLC 1.01
+FRES.L Fresnillo PLC 1.00
+DIAL.L Dialight PLC 0.84
+AEWU.L AEW UK REIT PLC 0.82
+BVC.L Batm Advanced Communications Ltd 0.81
+KMR.L Kenmare Resources PLC 0.80
+EPICE.L Ediston Property Investment Company PLC 0.64
+SERE.L Schroder European Real Estate Investment Trust PLC 0.38
+SOHO.L Triple Point Social Housing REIT PLC 0.30
+APTD.L Aptitude Software Group PLC 0.27
 </pre>
 </div>
 </div>
@@ -14028,7 +14022,10 @@ FSTA.L Fuller Smith &amp; Turner PLC 0.13
 <div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">recs_friendly_wrapper</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;WPP.L&#39;</span><span class="p">,</span> <span class="s1">&#39;BT.L&#39;</span><span class="p">])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Combined list based on all three lists</span>
+<span class="n">i_</span> <span class="o">=</span> <span class="s1">&#39;BlackRock Advisors (UK) Limited&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Combined list based on all three lists for&#39;</span><span class="p">,</span> <span class="n">i_</span><span class="p">)</span>
+<span class="n">recs_friendly_wrapper</span><span class="p">(</span><span class="n">i_</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -14045,20 +14042,68 @@ FSTA.L Fuller Smith &amp; Turner PLC 0.13
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Not using collaborative filtering
+<pre>Combined list based on all three lists for BlackRock Advisors (UK) Limited
+
+
+SDR.L Schroders PLC 1.61
+DIAL.L Dialight PLC 1.01
+WEIR.L Weir Group PLC 1.01
+SERE.L Schroder European Real Estate Investment Trust PLC 1.00
+RESIR.L Residential Secure Income PLC 0.68
+AEWU.L AEW UK REIT PLC 0.64
+DPEU.L DP Eurasia NV 0.38
+KMR.L Kenmare Resources PLC 0.31
+SRP.L Serco Group PLC 0.29
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Content filtering list based on portfolio only (no knowledge of investor)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Content filtering list based on portfolio only (no knowledge of investor)</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">recs_friendly_wrapper</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;WPP.L&#39;</span><span class="p">,</span> <span class="s1">&#39;ITV.L&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Content filtering list based on portfolio only (no knowledge of investor)
+
+Not using collaborative filtering
 Not using classification probabilities
 
 
-VOD.L Vodafone Group PLC 1.01
-MKS.L Marks and Spencer Group PLC 0.45
-BKGH.L Berkeley Group Holdings PLC 0.43
-GNK.L Greene King PLC 0.41
-ISA.L Inmarsat PLC 0.27
-PSON.L Pearson PLC 0.26
-EVRE.L EVRAZ plc 0.19
-PFC.L Petrofac Ltd 0.18
-ITV.L ITV PLC 0.08
-FOUR.L 4imprint Group PLC 0.00
+PSON.L Pearson PLC 1.01
+FOUR.L 4imprint Group PLC 0.57
+BKGH.L Berkeley Group Holdings PLC 0.51
+GNK.L Greene King PLC 0.38
+INF.L Informa PLC 0.23
+EVRE.L EVRAZ plc 0.18
+CARDC.L Card Factory PLC 0.11
+BT.L BT Group PLC 0.05
+MKS.L Marks and Spencer Group PLC 0.02
+ETO.L Entertainment One Ltd 0.00
 </pre>
 </div>
 </div>
