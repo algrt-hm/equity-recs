@@ -4,8 +4,6 @@
 
 Recommendation engine for equities investors
 
-If you want to see it in action, head over to <http://equity-recs.eu-west-2.elasticbeanstalk.com/>
-
 - - - -
 #### Files in this repo:
 
